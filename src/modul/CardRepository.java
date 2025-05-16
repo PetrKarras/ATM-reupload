@@ -27,6 +27,10 @@ public class CardRepository {
             writer.write(cislo+","+ pin+ ",0");
             writer.newLine();
             writer.close();
+            cardNumberList.add(cislo);
+            pinList.add(pin);
+            balanceList.add(0);
+            CardService.setSignCardIndex(cislo);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

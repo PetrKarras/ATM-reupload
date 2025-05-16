@@ -64,6 +64,9 @@ public class VyberScreen extends JPanel {
                 case INVALID:
                     JOptionPane.showMessageDialog(mainPanel, "Neplatná částka k výběru.", "Chyba", JOptionPane.ERROR_MESSAGE);
                     break;
+                case TOO_MUCH:
+                    JOptionPane.showMessageDialog(mainPanel, "Číslo je moc velké.", "Chyba", JOptionPane.ERROR_MESSAGE);
+                    break;
             }
         });
 
@@ -95,7 +98,19 @@ public class VyberScreen extends JPanel {
             btn.setForeground(Color.WHITE);
             btn.setFocusPainted(false);
             btn.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-            btn.addActionListener(e -> {CardService.Vyber(btn.getText());});
+            btn.addActionListener(e -> {
+                switch (CardService.Vyber(btn.getText())) {
+                    case SUCCESS:
+                        JOptionPane.showMessageDialog(mainPanel, "Výběr byl úspěšný.", "Informace", JOptionPane.INFORMATION_MESSAGE);
+                        break;
+                    case INSUFFICIENT:
+                        JOptionPane.showMessageDialog(mainPanel, "Nedostatek prostředků na účtu.", "Chyba", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    case INVALID:
+                        JOptionPane.showMessageDialog(mainPanel, "Neplatná částka k výběru.", "Chyba", JOptionPane.ERROR_MESSAGE);
+                        break;
+                }
+            });
             buttonPanel.add(btn);
         }
 

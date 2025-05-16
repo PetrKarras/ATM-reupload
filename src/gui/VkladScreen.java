@@ -48,6 +48,9 @@ public class VkladScreen extends JPanel {
                 case INVALID:
                     JOptionPane.showMessageDialog(mainPanel, "Textové pole je prázdné. Prosím zadejte častku vkladu.", "Chyba", JOptionPane.ERROR_MESSAGE);
                     break;
+                case TOO_MUCH:
+                    JOptionPane.showMessageDialog(mainPanel, "Číslo je moc velké.", "Chyba", JOptionPane.ERROR_MESSAGE);
+                    break;
             }});
 
         JButton backBtn = new JButton("🔙 Zpět");

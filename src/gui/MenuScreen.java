@@ -62,7 +62,13 @@ public class MenuScreen extends JPanel {
                 }
             });
 
-            btn.addActionListener(e -> cardLayout.show(mainPanel, target));
+            btn.addActionListener(e ->{
+                        UIService.clearTextFields(mainPanel);
+                        cardLayout.show(mainPanel, target);
+                    });
+
+
+
             buttonPanel.add(btn);
         }
 

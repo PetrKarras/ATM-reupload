@@ -3,6 +3,7 @@ package modul;
 public enum Result {
     SUCCESS,
     INSUFFICIENT,
-    INVALID
+    INVALID,
+    TOO_MUCH
 }
 

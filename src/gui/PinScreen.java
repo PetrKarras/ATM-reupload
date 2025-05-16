@@ -60,6 +60,7 @@ public class PinScreen extends JPanel {
         backBtn.setFocusPainted(false);
         backBtn.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         backBtn.addActionListener(e -> {
+            UIService.clearTextFields(mainPanel);
             UIService.Back(mainPanel,cardLayout,"WELCOME");});
 
 

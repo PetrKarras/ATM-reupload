@@ -4,17 +4,24 @@ public class CardService {
     private static String signCardNumber = null;
     private static Integer signCardIndex = null;
     
-    public static Result Vyber(String vyberText){
-        System.out.println(vyberText);
+    public static Result Vyber(String vyberString){
+        System.out.println(vyberString);
 
-        if(vyberText.isEmpty())
+        if(vyberString.isEmpty())
+        {
+            return Result.TOO_MUCH;
+        }
+        int vyberInt;
+        try {
+            vyberInt = Integer.parseInt(vyberString);
+        }
+        catch (NumberFormatException e)
         {
             return Result.INVALID;
         }
-        int vyber =Integer.parseInt( vyberText);
-        if (vyber <= CardRepository.getBalance(signCardIndex)){
+        if (vyberInt <= CardRepository.getBalance(signCardIndex)){
             int balance = CardRepository.getBalance(signCardIndex);
-            CardRepository.setBalance(signCardIndex,balance-vyber );
+            CardRepository.setBalance(signCardIndex,balance-vyberInt );
             CardRepository.write();
             return Result.SUCCESS;
 
@@ -30,7 +37,14 @@ public class CardService {
            // JOptionPane.showMessageDialog(panel, "Neplatná častka.", "Chyba", JOptionPane.ERROR_MESSAGE);
             return Result.INVALID;
         }
-        int vkladInt = Integer.parseInt(vkladString);
+        int vkladInt;
+        try {
+            vkladInt = Integer.parseInt(vkladString);
+        }
+        catch (NumberFormatException e)
+        {
+            return Result.TOO_MUCH;
+        }
         System.out.println(""+vkladInt);
         if (vkladInt > 0 ) {
             System.out.println(""+vkladInt);
@@ -71,5 +85,7 @@ public class CardService {
     }
 
     public static Integer getSignCardIndex(){return signCardIndex;}
+    public static void  setSignCardIndex(String SignCardNumber){signCardIndex = CardRepository.getCardIndex(SignCardNumber);
+        System.out.println("Karta: "+signCardNumber+"Index: "+signCardIndex);}
 
 }

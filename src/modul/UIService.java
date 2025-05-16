@@ -41,6 +41,7 @@ public class UIService {
             JOptionPane.showMessageDialog(panel, "Číslo karty má 16 číslic. Prosím zadejte ho znovu", "Chyba", JOptionPane.ERROR_MESSAGE);
         } else {
             CardService.setSignCardNumber(text);
+            UIService.clearTextFields(panel);
             layout.show(panel, "PIN");
         }
     }
@@ -48,4 +49,17 @@ public class UIService {
     public static void Back(JPanel panel, CardLayout cardLayout,String screenName) {
         cardLayout.show(panel, screenName);
     }
+    public static void clearTextFields(JPanel panel) {
+        for (Component component : panel.getComponents()) {
+            if (component instanceof JTextField) {
+                ((JTextField) component).setText("");
+            } else if (component instanceof JPasswordField) {
+                ((JPasswordField) component).setText("");
+            } else if (component instanceof JPanel) {
+                // Pro vnořené panely (rekurzivně)
+                clearTextFields((JPanel) component);
+            }
+        }
+    }
+
 }
