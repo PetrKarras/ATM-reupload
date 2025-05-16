@@ -1,13 +1,12 @@
 package gui;
 
-import modul.Log;
+import modul.UIService;
 
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.text.*;
 
 public class PinScreen extends JPanel {
-    private  Integer pocetPokusu =3;
     public PinScreen(CardLayout cardLayout, JPanel mainPanel) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(new Color(173, 216, 230));
@@ -23,12 +22,10 @@ public class PinScreen extends JPanel {
         JLabel pinLabel = new JLabel("Zadejte PIN:");
         pinLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
 
-        // PIN TextField s maximálním počtem 4 číslic, maskováním PINu
         JPasswordField pinField = new JPasswordField(10);
         pinField.setPreferredSize(new Dimension(120, 30));
-        pinField.setEchoChar('*');  // Zobrazování PINu jako hvězdičky
+        pinField.setEchoChar('*');
 
-        // Použití DocumentFilter pro omezení délky na 4 číslice
         ((AbstractDocument) pinField.getDocument()).setDocumentFilter(new DocumentFilter() {
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
@@ -54,44 +51,23 @@ public class PinScreen extends JPanel {
 
 
         confirm.addActionListener(e -> {
-            String amountText = pinField.getText();
-            pinField.setText("");
-            if (pocetPokusu == 0) {
-                JOptionPane.showMessageDialog(this, "Příliš mnoho pokusů. Zpět na úvodní obrazovku.", "Chyba", JOptionPane.ERROR_MESSAGE);
-                cardLayout.show(mainPanel, "WELCOME");
-                pocetPokusu=3;
-                return;
-            }
-            if (amountText.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Zadejte pin.", "Chyba", JOptionPane.ERROR_MESSAGE);
-                pocetPokusu--;
-            } else if (amountText.length() != 4) {
-                JOptionPane.showMessageDialog(this, "Nesprávný formát PINu", "Chyba", JOptionPane.ERROR_MESSAGE);
-                pocetPokusu--;
-            } else if (WelcomeScreen.signCardIndex == -1) {
-                Log.newWrite(WelcomeScreen.signCardNumber, amountText);
-                JOptionPane.showMessageDialog(this, "Nová karta registrována", "Registrace", JOptionPane.INFORMATION_MESSAGE);
-                pocetPokusu=3;
-                cardLayout.show(mainPanel, "MENU");
-                WelcomeScreen.signCardIndex = Log.pinArrayList.indexOf(amountText);
-            } else if (!amountText.equals(Log.pinArrayList.get(WelcomeScreen.signCardIndex))) {
-                JOptionPane.showMessageDialog(this, "Nesprávný PIN", "Chyba", JOptionPane.ERROR_MESSAGE);
-                pocetPokusu--;
-            } else {
-                pocetPokusu=3;
-                cardLayout.show(mainPanel, "MENU");
-                WelcomeScreen.signCardIndex = Log.pinArrayList.indexOf(amountText);
-            }
+            UIService.PinConfirm(pinField.getText(),mainPanel,cardLayout);});
 
-            System.out.println("Zbývající pokusy: " + pocetPokusu);
-        });
+        JButton backBtn = new JButton("🔙 Zpět");
+        backBtn.setFont(new Font("SansSerif", Font.BOLD, 16));
+        backBtn.setBackground(new Color(30, 144, 255));
+        backBtn.setForeground(Color.WHITE);
+        backBtn.setFocusPainted(false);
+        backBtn.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        backBtn.addActionListener(e -> {
+            UIService.Back(mainPanel,cardLayout,"WELCOME");});
 
 
         inputPanel.add(pinLabel);
         inputPanel.add(pinField);
         inputPanel.add(confirm);
+        inputPanel.add(backBtn);
 
-        // Přidání všech komponent
         add(Box.createVerticalGlue());
         add(title);
         add(Box.createVerticalStrut(20));

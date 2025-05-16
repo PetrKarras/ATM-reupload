@@ -1,5 +1,7 @@
 package gui;
 
+import modul.UIService;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,11 +9,9 @@ public class MenuScreen extends JPanel {
     public MenuScreen(CardLayout cardLayout, JPanel mainPanel) {
         setLayout(new BorderLayout());
 
-        // Hlavní panel pro MenuScreen
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(new Color(173, 216, 230));
 
-        // Horní panel s názvem a logout tlačítkem
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setOpaque(false);
 
@@ -21,7 +21,7 @@ public class MenuScreen extends JPanel {
         JButton logout = new JButton("❌");
         logout.setForeground(Color.RED);
         logout.setFont(new Font("SansSerif", Font.BOLD, 20));
-        logout.addActionListener(e -> cardLayout.show(mainPanel, "WELCOME"));
+        logout.addActionListener(e -> UIService.Back(mainPanel,cardLayout,"WELCOME"));
         logout.setBackground(null);
         logout.setOpaque(false);
         logout.setContentAreaFilled(false);
@@ -31,38 +31,34 @@ public class MenuScreen extends JPanel {
         topPanel.add(logout, BorderLayout.EAST);
         topPanel.add(title, BorderLayout.CENTER);
 
-        // Panel pro tlačítka uprostřed obrazovky
         JPanel centerWrapper = new JPanel();
         centerWrapper.setOpaque(false);
         centerWrapper.setLayout(new BoxLayout(centerWrapper, BoxLayout.Y_AXIS));
 
-        // Mřížka tlačítek s většími tlačítky
         JPanel buttonPanel = new JPanel(new GridLayout(2, 2, 20, 20));
         buttonPanel.setOpaque(false);
-        buttonPanel.setMaximumSize(new Dimension(600, 300));  // Zvětšení pro větší tlačítka
+        buttonPanel.setMaximumSize(new Dimension(600, 300));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
         String[] labels = {"Výběr", "Vklad", "Zůstatek", "Změna PINu"};
         String[] targets = {"VYBER", "VKLAD", "ZUSTATEK", "ZMENAPINU"};
 
-        // Tlačítka s ikonami a většími fonty
         for (int i = 0; i < labels.length; i++) {
             JButton btn = new JButton(labels[i]);
             btn.setFont(new Font("SansSerif", Font.BOLD, 18));
             btn.setBackground(new Color(173, 216, 230));
             btn.setForeground(Color.BLACK);
-            btn.setPreferredSize(new Dimension(150, 60));  // Zvětšení tlačítek pro lepší viditelnost
+            btn.setPreferredSize(new Dimension(150, 60));
             btn.setFocusPainted(false);
             btn.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
             final String target = targets[i];
 
-            // Hover efekt (změna barvy při najetí myší)
             btn.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseEntered(java.awt.event.MouseEvent evt) {
-                    btn.setBackground(new Color(135, 206, 235));  // Světlejší modrá
+                    btn.setBackground(new Color(135, 206, 235));
                 }
                 public void mouseExited(java.awt.event.MouseEvent evt) {
-                    btn.setBackground(new Color(173, 216, 230));  // Původní barva
+                    btn.setBackground(new Color(173, 216, 230));
                 }
             });
 
@@ -70,7 +66,6 @@ public class MenuScreen extends JPanel {
             buttonPanel.add(btn);
         }
 
-        // Přidání BoxLayout pro středové umístění tlačítek
         centerWrapper.add(Box.createVerticalGlue());
         centerWrapper.add(buttonPanel);
         centerWrapper.add(Box.createVerticalGlue());

@@ -1,16 +1,15 @@
 package gui;
 
-import modul.Log;
+import modul.CardRepository;
+import modul.UIService;
 
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.text.*;
 
 public class WelcomeScreen extends JPanel {
-    public static String signCardNumber = null;
-    public static Integer signCardIndex = null;
     public WelcomeScreen(CardLayout layout, JPanel mainPanel) {
-        Log.read();
+        CardRepository.read();
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
@@ -52,20 +51,7 @@ public class WelcomeScreen extends JPanel {
         loginButton.setPreferredSize(size);
         loginButton.setFont(new Font("SansSerif", Font.PLAIN, 16));
         loginButton.addActionListener(e -> {
-            String amountText = cardField.getText();
-            if (amountText.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Prosím, čislo karty.", "Chyba", JOptionPane.ERROR_MESSAGE);
-            } else if (amountText.length() != 16){
-                JOptionPane.showMessageDialog(this, "Nespravně zadané čislo karty.", "Chyba", JOptionPane.ERROR_MESSAGE);
-            } else {
-                signCardNumber = amountText;
-                signCardIndex = Log.cardNumberArrayList.indexOf(amountText);
-                System.out.println("Index po přihlášení: " + WelcomeScreen.signCardIndex);
-
-                layout.show(mainPanel, "PIN");
-                cardField.setText("");
-            }
-        });
+            UIService.Login(cardField.getText(),mainPanel,layout);});
 
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 20));
         bottomPanel.setBackground(Color.WHITE);

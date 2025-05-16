@@ -2,17 +2,18 @@ package modul;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
-public class Log {
-    public static ArrayList<String> cardNumberArrayList = new ArrayList<String>();
-    public static ArrayList<String> pinArrayList = new ArrayList<String>();
-    public static ArrayList<Integer> zustatekArrayList= new ArrayList<Integer>();
+public class CardRepository {
+    private static List<String> cardNumberList = new ArrayList<String>();
+    private static List<String> pinList = new ArrayList<String>();
+    private static List<Integer> balanceList= new ArrayList<Integer>();
 
-    public  static  void write(){
+    public static  void write(){
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter("log.csv"));
-            for(Integer i =0;i < pinArrayList.size();i++) {
-                writer.write(cardNumberArrayList.get(i)+","+pinArrayList.get(i)+","+zustatekArrayList.get(i));
+            for(Integer i =0;i < pinList.size();i++) {
+                writer.write(cardNumberList.get(i)+","+pinList.get(i)+","+balanceList.get(i));
                 writer.newLine();
             }
             writer.close();
@@ -35,22 +36,31 @@ public class Log {
         File logFile = new File("log.csv");
         try {
             if (!logFile.exists()) {
-                // Vytvoříme prázdný soubor
+
                 logFile.createNewFile();
-                Log.newWrite("1111111111111111","1111");// nic nečteme, seznamy zůstanou prázdné
+                CardRepository.newWrite("1111111111111111","1111");
             }
-            // Pokud soubor existuje, načteme z něj data
             BufferedReader reader = new BufferedReader(new FileReader(logFile));
             String tmp;
             while ((tmp = reader.readLine()) != null) {
                 String[] fields = tmp.split(",");
-                cardNumberArrayList.add(fields[0]);
-                pinArrayList.add(fields[1]);
-                zustatekArrayList.add(Integer.parseInt(fields[2]));
+                cardNumberList.add(fields[0]);
+                pinList.add(fields[1]);
+                balanceList.add(Integer.parseInt(fields[2]));
             }
             reader.close();
         } catch (IOException e) {
             throw new RuntimeException("Chyba při práci se souborem log.csv", e);
         }
     }
+
+    public static String getCardNumber(int index){return cardNumberList.get(index);}
+    public static Integer getCardIndex(String cardNumber){return cardNumberList.indexOf(cardNumber);}
+
+    public static String getPin(int index) { return pinList.get(index); }
+    public static void setPin(int index, String newPin) { pinList.set(index, newPin); }
+
+    public static int getBalance(int index) { return balanceList.get(index); }
+    public static void setBalance(int index, int newBalance) { balanceList.set(index, newBalance); }
+
 }

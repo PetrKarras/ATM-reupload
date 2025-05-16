@@ -1,4 +1,4 @@
-package modul;// modul.Main.java
+package modul;
 
 public class Main {
     public static void main(String[] args) {

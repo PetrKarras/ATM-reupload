@@ -1,6 +1,7 @@
 package gui;
 
-import modul.Transaknce;
+import modul.CardService;
+import modul.UIService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,11 +27,18 @@ public class PinChangeScreen extends JPanel {
             public void keyTyped(KeyEvent e) {
                 char c = e.getKeyChar();
                 if (!Character.isDigit(c) || pinField.getText().length() >= 4) {
-                    e.consume(); // Zamezí nečíselným znakům a omezí délku na 4 znaky
+                    e.consume();
                 }
             }
         });
-
+        JButton backBtn = new JButton("🔙 Zpět");
+        backBtn.setFont(new Font("SansSerif", Font.BOLD, 16));
+        backBtn.setBackground(new Color(30, 144, 255));
+        backBtn.setForeground(Color.WHITE);
+        backBtn.setFocusPainted(false);
+        backBtn.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        backBtn.addActionListener(e -> {
+            UIService.Back(mainPanel,cardLayout,"MENU");});
 
         JButton acceptBtn = new JButton("✔ Změnit PIN");
         acceptBtn.setFont(new Font("SansSerif", Font.BOLD, 16));
@@ -39,12 +47,13 @@ public class PinChangeScreen extends JPanel {
         acceptBtn.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         acceptBtn.setFocusPainted(false);
         acceptBtn.addActionListener(e -> {
-            String pinText = pinField.getText();
-            if (pinText.isEmpty() || pinField.getText().length() <4) {
-                JOptionPane.showMessageDialog(this, "Prosím, zadejte nový PIN.", "Chyba", JOptionPane.ERROR_MESSAGE);
-            } else {
-                Transaknce.ZmenaPin(WelcomeScreen.signCardIndex,pinText);
-                cardLayout.show(mainPanel, "MENU");
+            switch (CardService.PinChange(pinField.getText())) {
+                case SUCCESS:
+                    JOptionPane.showMessageDialog(mainPanel, "Pin byl úspěšně změněn.", "Informace", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                case INVALID:
+                    JOptionPane.showMessageDialog(mainPanel, "Neplatný formát PINu.", "Chyba", JOptionPane.ERROR_MESSAGE);
+                    break;
             }
         });
 
@@ -61,6 +70,8 @@ public class PinChangeScreen extends JPanel {
         center.add(pinField, gbc);
         gbc.gridy = 2;
         center.add(acceptBtn, gbc);
+        gbc.gridy =3;
+        center.add(backBtn,gbc);
 
         panel.add(center, BorderLayout.CENTER);
         add(panel);

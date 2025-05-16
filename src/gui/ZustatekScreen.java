@@ -1,6 +1,7 @@
 package gui;
 
-import modul.Transaknce;
+import modul.CardService;
+import modul.UIService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,13 +24,7 @@ public class ZustatekScreen extends JPanel {
         acceptBtn.setForeground(Color.WHITE);
         acceptBtn.setFocusPainted(false);
         acceptBtn.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        acceptBtn.addActionListener(e -> {
-            if (WelcomeScreen.signCardIndex != null && WelcomeScreen.signCardIndex >= 0) {
-                label.setText(Transaknce.Vypis(WelcomeScreen.signCardIndex));
-            } else {
-                label.setText("Chyba: Karta není načtena.");
-            }
-        });
+        acceptBtn.addActionListener(e -> {label.setText(CardService.Vypis());});
 
         JButton backBtn = new JButton("🔙 Zpět");
         backBtn.setFont(new Font("SansSerif", Font.BOLD, 16));
@@ -38,21 +33,16 @@ public class ZustatekScreen extends JPanel {
         backBtn.setFocusPainted(false);
         backBtn.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         backBtn.addActionListener(e -> {
-            reset();  // Resetuj stav při návratu
-            cardLayout.show(mainPanel, "MENU");
-        });
+            UIService.Back(mainPanel,cardLayout,"MENU");});
 
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         bottomPanel.setOpaque(false);
         bottomPanel.add(acceptBtn);
         bottomPanel.add(backBtn);
 
+
         panel.add(label, BorderLayout.CENTER);
         panel.add(bottomPanel, BorderLayout.SOUTH);
         add(panel);
-    }
-
-    public void reset() {
-        label.setText("Zůstatek bude zobrazen po potvrzení.");
     }
 }

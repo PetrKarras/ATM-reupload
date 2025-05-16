@@ -13,8 +13,6 @@ public class Screens extends JFrame {
         initUI();
         loadScreens();
         showWelcome();
-        System.out.println("Index po přihlášení: " + WelcomeScreen.signCardIndex);
-
     }
 
     private void initUI() {
